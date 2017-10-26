@@ -9,7 +9,8 @@ class App extends Component {
           {name:'Max', age:28},
           {name:'May', age:20},
           {name:'Alex',age:23},
-      ]
+      ],
+      showPersons:false
   };
 
   switchNameHandler = (name,age) => {
@@ -21,7 +22,7 @@ class App extends Component {
           ]
       });
   };
-    nameChangedHandler = (event) => {
+  nameChangedHandler = (event) => {
         console.log('Hello Working');
         this.setState({
             persons:[
@@ -31,6 +32,11 @@ class App extends Component {
             ]
         });
     };
+  togglePersonHandler = () => {
+    const doesShow = this.state.showPersons;
+    console.log(doesShow);
+    return this.setState({showPersons:!doesShow})
+  };
 
   render() {
     const style={
@@ -40,24 +46,32 @@ class App extends Component {
         padding:'8px',
         cursor:'pointer'
     };
+    let persons = null;
+    if(this.state.showPersons){
+      persons = (
+        <div>
+          <Person
+                    name={this.state.persons[0].name}
+                    age={this.state.persons[0].age}/>
+          <Person
+                    name={this.state.persons[1].name}
+                    age={this.state.persons[1].age}
+                    click={this.switchNameHandler.bind(this, 'Maximillian', 88)}
+                    changed={this.nameChangedHandler}
+                >My hobby is Racing</Person>
+          <Person
+                    name={this.state.persons[2].name}
+                    age={this.state.persons[2].age}/>
+        </div>
+      );
+    }
     return (
       <div className="App">
         <h1>Hi, I'm a React App</h1>
         <button
-            style={style}
-            onClick={() => this.switchNameHandler('Maximillian',88)}>Button</button>
-        <Person
-          name={this.state.persons[0].name}
-          age={this.state.persons[0].age}/>
-        <Person
-          name={this.state.persons[1].name}
-          age={this.state.persons[1].age}
-          click={this.switchNameHandler.bind(this,'Maximillian',88)}
-          changed={this.nameChangedHandler}
-          >My hobby is Racing</Person>
-        <Person
-          name={this.state.persons[2].name}
-          age={this.state.persons[2].age}/>
+           style={style}
+           onClick={this.togglePersonHandler}>Toggle Person</button>
+        {persons}
       </div>
      );
   }
