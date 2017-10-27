@@ -1,65 +1,57 @@
 import React, { Component } from 'react';
 import './App.css';
+import './Person/charcomponent.css'
 
-import Person from './Person/Person'
+import ValidationComponent from './Person/ValidationComponent'
+import CharComponent from './Person/CharComponent'
 
 class App extends Component {
-  state = {
-      persons:[
-          {name:'Max', age:28},
-          {name:'May', age:20},
-          {name:'Alex',age:23},
-      ]
+
+  state={
+      arrayLength:0,
+      arrayValue:['']
   };
 
-  switchNameHandler = (name,age) => {
+  inputChanged = (event) => {
+      const inputArrayValue = event.target.value.split('');
+      const inputArrayLength = inputArrayValue.length;
+      inputArrayValue.join('');
       this.setState({
-          persons:[
-              {name:name, age:age},
-              {name:'May', age:20},
-              {name:'Alex',age:27},
-          ]
+          arrayValue:inputArrayValue,
+          arrayLength:inputArrayLength
       });
   };
-    nameChangedHandler = (event) => {
-        console.log('Hello Working');
-        this.setState({
-            persons:[
-                {name:'Max', age:29},
-                {name:event.target.value, age:20},
-                {name:'Alex',age:27},
-            ]
-        });
-    };
+
+  deleteInputHandler = (index) => {
+      const array = this.state.arrayValue;
+      array.splice(index,1);
+      const arrayLength = array.length;
+      this.setState({
+          arrayValue:array,
+          arrayLength:arrayLength
+      });
+  };
 
   render() {
-    const style={
-        backgroundColor:'white',
-        font:'inherit',
-        border:'1px solid blue',
-        padding:'8px',
-        cursor:'pointer'
-    };
-    return (
+      let charArray = null;
+      charArray = (
+        <div>
+          {this.state.arrayValue.map((input,index)=>{
+             return <CharComponent
+                      value = {input}
+                      key={index}
+                      click = {()=>{this.deleteInputHandler(index)}}/>
+          })}
+        </div>
+      );
+      return (
       <div className="App">
-        <h1>Hi, I'm a React App</h1>
-        <button
-            style={style}
-            onClick={() => this.switchNameHandler('Maximillian',88)}>Button</button>
-        <Person
-          name={this.state.persons[0].name}
-          age={this.state.persons[0].age}/>
-        <Person
-          name={this.state.persons[1].name}
-          age={this.state.persons[1].age}
-          click={this.switchNameHandler.bind(this,'Maximillian',88)}
-          changed={this.nameChangedHandler}
-          >My hobby is Racing</Person>
-        <Person
-          name={this.state.persons[2].name}
-          age={this.state.persons[2].age}/>
+        <input type="text" onChange={this.inputChanged}/>
+        <p>Input Text length: {this.state.arrayLength}</p>
+        <ValidationComponent length = {this.state.arrayLength}/>
+        {charArray}
       </div>
-     );
+    );
   }
 }
 
