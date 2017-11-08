@@ -15,4 +15,5 @@ localIdentName:'[name]__[local]__[hash:base64:5]'
 
 then go to webpack.config.prod folder and copy these in the css loaders there
 
+## Error Boundary is a high order component that can be used to encopmpass the child component if it throws an error
 
